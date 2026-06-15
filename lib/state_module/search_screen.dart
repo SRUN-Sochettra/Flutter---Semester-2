@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'counter_logic.dart';
 import 'detail_screen.dart';
-import 'theme_logic.dart';
 import 'gridstyle_logic.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'Product_service.dart';
+import 'product_service.dart';
 import 'product_model.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -109,7 +108,6 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _gridStyle = true;
   final _searchCtrl = TextEditingController();
   AppBar _buildAppBar() {
-    bool dark = context.watch<ThemLogic>().dark;
     _gridStyle = context.watch<GridStyleLogic>().gridStyle;
     return AppBar(
       title: TextField(

@@ -6,6 +6,8 @@ import 'gridstyle_logic.dart';
 import 'theme_logic.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
