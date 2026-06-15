@@ -1,26 +1,21 @@
-// import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../models/the_movie_model.dart';
+import 'movie_detail_screen.dart';
+import '../services/the_movie_service.dart';
 import 'package:provider/provider.dart';
-// import 'counter_logic.dart';
-import 'detail_screen.dart';
-import 'gridstyle_logic.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'product_service.dart';
-import 'product_model.dart';
+import '../logics/movie_gridstyle_logic.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+class NowplayingScreen extends StatefulWidget {
+  const NowplayingScreen({super.key});
 
   @override
-  State<SearchScreen> createState() {
-    return _SearchScreenState();
-  }
+  State<NowplayingScreen> createState() => _NowplayingScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
-
+class _NowplayingScreenState extends State<NowplayingScreen> {
   bool _showUpIcon = false;
+
   @override
   void initState() {
     super.initState();
@@ -41,15 +36,11 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      floatingActionButton: _showUpIcon ? _buildFloating() : null,
+      floatingActionButton: _showUpIcon ? _builFloating() : null,
       // drawer: _buildDrawer(),
       body: _buildBody(),
     );
   }
-
-  // Widget _buildDrawer() {
-  //   return Drawer(backgroundColor: Theme.of(context).colorScheme.primary);
-  // }
 
   Widget _buildSkeletonizer() {
     bool isLandscape =
@@ -57,92 +48,73 @@ class _SearchScreenState extends State<SearchScreen> {
 
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Skeletonizer(
-      child: GridView.builder(
-        padding: EdgeInsets.symmetric(
-          horizontal: screenWidth > 1000 ? (screenWidth - 1000) / 2 : 8,
-          vertical: 8,
-        ),
-        // controller: _scroller,
-        // physics: BouncingScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: _gridStyle ? (isLandscape ? 4 : 2) : 1,
-          childAspectRatio: _gridStyle ? 3 / 5 : 3 / 3,
-        ),
-        itemCount: 20,
-        itemBuilder: (context, index) {
-          return Card(
-            child: Column(
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadiusGeometry.circular(8),
-                    child: Container(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "asd asd asd sd asd sad asd",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("asdasd sa d", textAlign: TextAlign.right),
-                ),
-              ],
-            ),
-          );
-        },
+    return GridView.builder(
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth > 1000 ? (screenWidth - 1000) / 2 : 8,
+        vertical: 8,
       ),
+      itemCount: 20,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: _gridStyle ? (isLandscape ? 4 : 2) : 1,
+        childAspectRatio: _gridStyle ? 3 / 5 : 3 / 3,
+      ),
+      itemBuilder: (context, index) {
+        return Card(
+          child: Column(
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: double.maxFinite,
+                    height: double.maxFinite,
+                    color: Colors.grey.shade300,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(height: 16, color: Colors.grey.shade300),
+              ),
+              Container(
+                width: double.maxFinite,
+                padding: const EdgeInsets.all(8.0),
+                child: Container(height: 16, color: Colors.grey.shade300),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   bool _gridStyle = true;
-  final _searchCtrl = TextEditingController();
+
   AppBar _buildAppBar() {
-    _gridStyle = context.watch<GridStyleLogic>().gridStyle;
+    _gridStyle = context.watch<MovieGridstyleLogic>().gridStyle;
+
     return AppBar(
-      title: TextField(
-        controller: _searchCtrl,
-        style:TextStyle(
-          color: Colors.white,
-        ),
-       
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search),
-          hintText: "Search products...",
-          hintStyle:TextStyle(
-            color: Colors.white60,
-          ),
-          ),
-          onSubmitted: (text){
-            setState(() {
-              _futureData = ProductService().search(_searchCtrl.text.trim());
-            });
-          },
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset("images/movies.png"),
       ),
+      title: const Text("Fox Shop"),
     );
   }
 
-  late Future<List<ProductModel>> _futureData = ProductService().search(_searchCtrl.text.trim());
+  final _service = TheMovieService();
+
+  late Future<TheMovie> _futureData = _service.read();
 
   Widget _buildBody() {
     return Center(
       child: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            _futureData = ProductService().search(_searchCtrl.text.trim()); 
+            _futureData = _service.read();
           });
         },
-        child: FutureBuilder<List<ProductModel>>(
+        child: FutureBuilder<TheMovie>(
           future: _futureData,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -153,7 +125,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   FilledButton(
                     onPressed: () {
                       setState(() {
-                        _futureData = ProductService().search(_searchCtrl.text.trim());
+                        _futureData = _service.read();
                       });
                     },
                     child: Text("RETRY"),
@@ -173,13 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _scroller.dispose();
-    super.dispose();
-  }
-
-  Widget _buildFloating() {
+  Widget _builFloating() {
     return FloatingActionButton(
       onPressed: () {
         _scroller.animateTo(
@@ -191,16 +157,20 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Icon(Icons.arrow_upward),
     );
   }
-    final ScrollController _scroller = ScrollController();
 
-  Widget _buildGridView(List<ProductModel>? items) {
-    if (items == null) {
+  final _scroller = ScrollController();
+
+  Widget _buildGridView(TheMovie? data) {
+    if (data == null) {
       return Center(child: Icon(Icons.list));
     }
+
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
     double screenWidth = MediaQuery.of(context).size.width;
+
+    final items = data.results;
 
     return GridView.builder(
       padding: EdgeInsets.symmetric(
@@ -218,18 +188,21 @@ class _SearchScreenState extends State<SearchScreen> {
         final item = items[index];
         return InkWell(
           onTap: () {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (context) => DetailScreen(item)));
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => MovieDetailScreen(item.id.toString()),
+              ),
+            );
           },
           child: Card(
             child: Column(
               children: [
                 Expanded(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadiusGeometry.circular(8),
                     child: CachedNetworkImage(
-                      imageUrl: item.images[0],
+                      imageUrl:
+                          'https://image.tmdb.org/t/p/w500/${item.posterPath}',
                       placeholder: (_, _) => Container(color: Colors.grey),
                       errorWidget: (_, _, _) =>
                           Container(color: Colors.grey.shade800),
@@ -245,11 +218,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                Container(
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("USD ${item.price}", textAlign: TextAlign.right),
                 ),
               ],
             ),

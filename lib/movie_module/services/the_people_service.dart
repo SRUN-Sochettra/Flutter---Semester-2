@@ -1,22 +1,19 @@
-// ignore: file_names
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'product_model.dart';
 
+import '../api_key.dart';
+import '../models/person_model.dart';
 
-class ProductService {
+class ThePeopleService {
+  final baseUrl = "https://api.themoviedb.org/3/person";
 
-  Future<List<ProductModel>> search (String title)async {
-    if(title.isEmpty){
-      return [];  
-
-    }
+  Future<PopularPeople> readPopular() async {
     try {
       http.Response response = await http.get(
-        Uri.parse("https://api.escuelajs.co/api/v1/products/?title=$title"),
+        Uri.parse("$baseUrl/popular?language=en-US&page=1&api_key=$apiKey"),
       );
       if (response.statusCode == 200) {
-        return compute(productModelFromJson , response.body);
+        return compute(popularPeopleFromJson, response.body);
       } else {
         throw Exception("Error status code: ${response.statusCode}");
       }
@@ -25,14 +22,13 @@ class ProductService {
     }
   }
 
-
-  Future<List<ProductModel>> readApiData() async {
+  Future<PersonDetail> get(String personId) async {
     try {
       http.Response response = await http.get(
-        Uri.parse("https://api.escuelajs.co/api/v1/products"),
+        Uri.parse("$baseUrl/$personId?language=en-US&api_key=$apiKey"),
       );
       if (response.statusCode == 200) {
-        return compute(productModelFromJson , response.body);
+        return compute(personDetailFromJson, response.body);
       } else {
         throw Exception("Error status code: ${response.statusCode}");
       }

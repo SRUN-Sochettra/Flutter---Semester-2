@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
+import '../screens/parent_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'count_app.dart';
-import 'gridstyle_logic.dart';
-import 'theme_logic.dart';
+import '../logics/movie_gridstyle_logic.dart';
+import '../logics/movie_theme_logic.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class MovieSplashScreen extends StatefulWidget {
+  const MovieSplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<MovieSplashScreen> createState() => _MovieSplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  Future _lodData() async {
-    await Future.delayed(Duration(seconds: 2), () {});
+class _MovieSplashScreenState extends State<MovieSplashScreen> {
+  
+  Future _loadData() async {
+    await Future.delayed(Duration(seconds: 2), (){});
     if (mounted) {
-      await context.read<ThemLogic>().readTheme();
+      await context.read<MovieThemeLogic>().readTheme();
     }
     if (mounted) {
-      await context.read<GridStyleLogic>().readStyle();
+      await context.read<MovieGridstyleLogic>().readStyle();
     }
   }
 
-  late Future _futureData = _lodData();
+  late Future _futureData = _loadData();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.deepOrange,
         body: Center(
           child: FutureBuilder(
             future: _futureData,
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     FilledButton(
                       onPressed: () {
                         setState(() {
-                          _futureData = _lodData();
+                          _futureData = _loadData();
                         });
                       },
                       child: Text("RETRY"),
@@ -51,9 +52,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 );
               }
               if (snapshot.connectionState == ConnectionState.done) {
-                return CountApp();
+                return ParentScreen();
               } else {
-                return _buidLoading();
+                return _buildLoading();
               }
             },
           ),
@@ -62,16 +63,17 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Widget _buidLoading() {
+  Widget _buildLoading(){
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Icon(Icons.rocket_launch, size: 300, color: Colors.white),
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset("images/movies.png", height: 300,),
         ),
-        CircularProgressIndicator(color: Colors.pink),
+        CircularProgressIndicator(color: Colors.white,),
       ],
     );
   }
+
 }
