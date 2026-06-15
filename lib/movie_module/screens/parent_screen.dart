@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1234/movie_module/screens/nowplaying_screen.dart';
-import 'package:flutter_application_1234/movie_module/screens/people_screen.dart';
+import 'package:flutter_application_123/movie_module/screens/nowplaying_screen.dart';
+import 'package:flutter_application_123/movie_module/screens/people_screen.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class ParentScreen extends StatefulWidget {
