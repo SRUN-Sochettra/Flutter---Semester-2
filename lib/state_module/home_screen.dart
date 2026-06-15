@@ -2,12 +2,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'counter_logic.dart';
 import 'detail_screen.dart';
-import 'theme_logic.dart';
 import 'gridstyle_logic.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'Product_service.dart';
+import 'product_service.dart';
 import 'product_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -54,28 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // Widget _buildDrawer() {
   //   return Drawer(backgroundColor: Theme.of(context).colorScheme.primary);
   // }
-
-  Widget _buildLoading() {
-    return Skeletonizer(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: double.maxFinite,
-                height: 200,
-                color: Colors.pink,
-              ),
-              Text("a das dsd as da ds dsa da"),
-              Text("da ds dsa da"),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildSkeletonizer() {
     bool isLandscape =
@@ -133,7 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool _gridStyle = true;
   AppBar _buildAppBar() {
-    bool dark = context.watch<ThemLogic>().dark;
     _gridStyle = context.watch<GridStyleLogic>().gridStyle;
     return AppBar(
       leading: const Icon(Icons.rocket_launch),
@@ -275,8 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "${item.title}",
-
+                    item.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

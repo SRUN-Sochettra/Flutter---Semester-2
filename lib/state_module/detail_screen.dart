@@ -2,16 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 
 import 'product_model.dart';
 import 'url_util.dart';
 
-import 'counter_logic.dart';
-
 class DetailScreen extends StatefulWidget {
-  ProductModel item;
-  DetailScreen(this.item);
+  final ProductModel item;
+  const DetailScreen(this.item, {super.key});
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
@@ -19,12 +16,11 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
-    int cnt = context.watch<CounterLogic>().counter;
     final item = widget.item;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${item.title}"),
+        title: Text(item.title),
         // toolbarHeight: 20,
       ),
       body: _buildBody(),
@@ -54,7 +50,7 @@ class _DetailScreenState extends State<DetailScreen> {
           child: Card(
             child: ListTile(
               leading: FaIcon(FontAwesomeIcons.cartShopping),
-              title: Text("${item.title}"),
+              title: Text(item.title),
             ),
             // color: Colors.amber,
           ),
@@ -93,7 +89,7 @@ class _DetailScreenState extends State<DetailScreen> {
           child: Card(
             child: ListTile(
               // leading: FaIcon(FontAwesomeIcons.cartShopping),
-              title: Text("${item.description}"),
+              title: Text(item.description),
               // iconColor: Colors.red,
               // selectedColor: Colors.blue,
               // textColor: Colors.green,

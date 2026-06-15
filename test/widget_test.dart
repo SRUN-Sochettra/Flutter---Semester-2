@@ -15,6 +15,8 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(stateProvider());
 
+    await tester.pump(const Duration(seconds: 3));
+
     // Verify that the app builds without errors.
     expect(find.byType(MaterialApp), findsOneWidget);
   });
