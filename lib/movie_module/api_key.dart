@@ -1,5 +1,5 @@
-final apiKey = "be393ef9a8d752392fd7a05c3efede80";
+final apiKey = "81149aba6fae523cd8bfd9cb6755f1ec";
 
 class ApiKey {
-  static const String movieKey = 'be393ef9a8d752392fd7a05c3efede80';
+  static const String movieKey = '81149aba6fae523cd8bfd9cb6755f1ec';
 }
