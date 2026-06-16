@@ -111,7 +111,7 @@ class _NowplayingScreenState extends State<NowplayingScreen> {
       child: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            _futureData = _service.read();
+            _futureData = _service.read(forceRefreshed: true);
           });
         },
         child: FutureBuilder<TheMovie>(
@@ -125,7 +125,7 @@ class _NowplayingScreenState extends State<NowplayingScreen> {
                   FilledButton(
                     onPressed: () {
                       setState(() {
-                        _futureData = _service.read();
+                        _futureData = _service.read(forceRefreshed: true);
                       });
                     },
                     child: Text("RETRY"),

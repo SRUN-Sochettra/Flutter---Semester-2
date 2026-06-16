@@ -30,7 +30,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
       child: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            _futureData = _service.readPopular();
+            _futureData = _service.readPopular(forceRefreshed: true);
           });
         },
         child: FutureBuilder<PopularPeople>(
@@ -44,7 +44,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
                   FilledButton(
                     onPressed: () {
                       setState(() {
-                        _futureData = _service.readPopular();
+                        _futureData = _service.readPopular(forceRefreshed: true);
                       });
                     },
                     child: Text("RETRY"),
