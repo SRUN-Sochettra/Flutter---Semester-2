@@ -31,7 +31,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       child: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            _futureData = _service.get(widget.movieId);
+            _futureData = _service.get(widget.movieId, forceRefreshed: true);
           });
         },
         child: FutureBuilder<MovieDetail>(
@@ -45,7 +45,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   FilledButton(
                     onPressed: () {
                       setState(() {
-                        _futureData = _service.get(widget.movieId);
+                        _futureData = _service.get(widget.movieId, forceRefreshed: true);
                       });
                     },
                     child: Text("RETRY"),

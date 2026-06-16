@@ -37,7 +37,7 @@ class _PersonDetailScreenState extends State<PersonDetailScreen> {
       child: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            _futureData = _service.get(widget.personId);
+            _futureData = _service.get(widget.personId, forceRefreshed: true);
           });
         },
         child: FutureBuilder<PersonDetail>(
@@ -51,7 +51,7 @@ class _PersonDetailScreenState extends State<PersonDetailScreen> {
                   FilledButton(
                     onPressed: () {
                       setState(() {
-                        _futureData = _service.get(widget.personId);
+                        _futureData = _service.get(widget.personId, forceRefreshed: true);
                       });
                     },
                     child: Text("RETRY"),
